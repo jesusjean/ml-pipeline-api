@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# Logs
+logs/
+
+# Data
+data/
+
+# Model artifacts
+output/
+
+# Environment variables
+.env
