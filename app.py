@@ -39,6 +39,15 @@ def load_model():
     model, model_features = load_model_artifacts(MODEL_PATH, METRICS_PATH)
 
 
+@app.get("/")
+def root():
+    return {
+        "message": "ML Customer Default Prediction API is running",
+        "docs": "/docs",
+        "health": "/health"
+    }
+
+
 @app.get("/health")
 def health():
     return {
