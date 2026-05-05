@@ -12,7 +12,9 @@ logs/
 data/
 
 # Model artifacts
-output/
+output/*
+!output/model_v1.joblib
+!output/metrics.json
 
 # Environment variables
 .env
