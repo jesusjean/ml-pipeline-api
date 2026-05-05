@@ -1,0 +1,7 @@
+customer_id,age,income,city,defaulted
+1,25,3000,Sao Paulo,0
+2,40,8000,Rio,0
+3,35,5000,Belo Horizonte,1
+4,29,,Sao Paulo,0
+5,50,12000,Rio,1
+6,33,4500,,0
