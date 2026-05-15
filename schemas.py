@@ -8,6 +8,7 @@ class PredictRequest(BaseModel):
 
 
 class PredictResponse(BaseModel):
+    prediction_label: str = Field(..., example="No Default")
     model_version: str = Field(..., example="v1")
     model_file: str = Field(..., example="output/model_v1.joblib")
     prediction: int = Field(..., example=0)

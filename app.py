@@ -69,6 +69,7 @@ def predict(req: PredictRequest):
     prediction = make_prediction(model, model_features, req)
 
     return PredictResponse(
+        prediction_label="No Default" if prediction == 0 else "Default",
         model_version=MODEL_VERSION,
         model_file=str(MODEL_PATH),
         prediction=prediction
