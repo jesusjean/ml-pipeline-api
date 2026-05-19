@@ -59,6 +59,12 @@ def health():
         "metrics_file_exists": METRICS_PATH.exists(),
     }
 
+@app.get("/model-info")
+def model_info():
+    return {
+        "model_version": MODEL_VERSION,
+        "model_file": str(MODEL_PATH)
+    }
 
 @app.post("/predict", response_model=PredictResponse)
 def predict(req: PredictRequest):
