@@ -72,11 +72,13 @@ def predict(req: PredictRequest):
     if model is None:
         raise HTTPEcpetion(status_code-500,detail="Model is not loaded")
 
-    prediction = make_prediction(model, model_features, req)
+    prediction, confidence = make_prediction(model, model_features, req)
 
     return PredictResponse(
         prediction_label="No Default" if prediction == 0 else "Default",
         model_version=MODEL_VERSION,
         model_file=str(MODEL_PATH),
-        prediction=prediction
+        prediction=prediction,
+        confidence=round(confidence,2)
     )
+
