@@ -68,6 +68,24 @@ def model_info():
         "model_file_exist": MODEL_PATH.exists()
     }
 
+@app.get("/metrics")
+def metrics():
+    if not METRICS_PATH.exists():
+        raise HTTPException(status_code=404, detail="Metrics file not found")
+
+    with open(METRICS_PATH, "r", encoding="utf-8") as f:
+        metrics_data = json.load(f)
+
+    return metrics_data
+
+
+@app.get("/features")
+def features():
+    return {
+        "features": model_features
+}
+
+
 @app.post("/predict", response_model=PredictResponse)
 def predict(req: PredictRequest):
 
