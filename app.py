@@ -63,7 +63,9 @@ def health():
 def model_info():
     return {
         "model_version": MODEL_VERSION,
-        "model_file": str(MODEL_PATH)
+        "model_file": str(MODEL_PATH),
+        "model_loaded": model is not None,
+        "model_file_exist": MODEL_PATH.exists()
     }
 
 @app.post("/predict", response_model=PredictResponse)
