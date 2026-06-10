@@ -8,6 +8,7 @@ from prediction_service import make_prediction    #pegando o módulo prediction 
 from fastapi import FastAPI, HTTPException
 from schemas import PredictRequest, PredictResponse  #Define formato dos dados
 from model_utils import load_model_artifacts         #Cuida do carregamento do modelo
+from model_loader import load_metrics, load_features
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -36,8 +37,8 @@ model_features = None
 def load_model():
     global model, model_features
 
-    model, model_features = load_model_artifacts(MODEL_PATH, METRICS_PATH)
-
+    model, _ = load_model_artifacts(MODEL_PATH, METRICS_PATH)
+    model_features = load_features(METRICS_PATH)
 
 @app.get("/")
 def root():
@@ -68,15 +69,13 @@ def model_info():
         "model_file_exist": MODEL_PATH.exists()
     }
 
+
 @app.get("/metrics")
 def metrics():
     if not METRICS_PATH.exists():
         raise HTTPException(status_code=404, detail="Metrics file not found")
 
-    with open(METRICS_PATH, "r", encoding="utf-8") as f:
-        metrics_data = json.load(f)
-
-    return metrics_data
+    return load_metrics(METRICS_PATH)
 
 
 @app.get("/features")
