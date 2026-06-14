@@ -18,7 +18,7 @@ load_dotenv()                                        #Carrrega configuração .e
 app = FastAPI(title="Customer Default Prediction API", version="0.1.0")
 
 #Configuração do modelo
-MODEL_VERSION = os.getenv("MODEL_VERSION")           #Define a versão do modelo
+MODEL_VERSION = os.getenv("MODEL_VERSION", "v1")           #Define a versão do modelo
 MODEL_FILENAME = f"model_{MODEL_VERSION}.joblib"     #Monta nome do arquivo
 MODEL_PATH = Path("output") / MODEL_FILENAME         #Monta o caminho do arquivo
 
