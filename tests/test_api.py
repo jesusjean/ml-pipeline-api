@@ -30,6 +30,8 @@ def test_predict():
     assert "prediction" in data
 
 def test_metrics():
+    client = TestClient(app)
+    
     response = client.get("/metrics")
 
     assert response.status_code == 200
