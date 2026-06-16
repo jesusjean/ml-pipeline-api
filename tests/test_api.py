@@ -40,3 +40,15 @@ def test_metrics():
 
     assert "accuracy" in data
     assert "features" in data
+
+def test_features():
+    client = TestClient(app)
+
+    response = client.get("/features")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data["features"]) > 0
+
