@@ -50,5 +50,12 @@ def test_features():
 
     data = response.json()
 
-    assert len(data["features"]) > 0
+    expected_features = [
+        "age",
+        "income",
+        "income_per_age",
+        "city_Rio",
+        "city_Sao Paulo"
+    ]
 
+    assert data["features"] == expected_features
