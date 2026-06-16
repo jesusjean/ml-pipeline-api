@@ -28,3 +28,13 @@ def test_predict():
     assert response.status_code == 200
     data = response.json()
     assert "prediction" in data
+
+def test_metrics():
+    response = client.get("/metrics")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert "accuracy" in data
+    assert "features" in data
