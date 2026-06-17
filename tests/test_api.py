@@ -31,7 +31,7 @@ def test_predict():
 
 def test_metrics():
     client = TestClient(app)
-    
+
     response = client.get("/metrics")
 
     assert response.status_code == 200
@@ -59,3 +59,18 @@ def test_features():
     ]
 
     assert data["features"] == expected_features
+
+
+def test_model_info():
+    client = TestClient(app)
+
+    response = client.get("/model-info")
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert data["model_version"] == "v1"
+    assert data["model_loaded"] is True
+    assert data["model_file_exists"] is True
+
