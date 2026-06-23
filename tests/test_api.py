@@ -74,3 +74,23 @@ def test_model_info():
     assert data["model_loaded"] is True
     assert data["model_file_exists"] is True
 
+def test_predict_invalid_input():
+    payload = {
+       "age": "banana",
+       "income": 5000,
+       "city": "Sao Paulo"
+    }
+
+    client = TestClient(app)
+    response = client.post("/predict", json=payload)
+    assert response.status_code == 422
+
+def test_predict_missing_filed():
+    payload = {
+      "age": 30,
+      "city": "Sao Paulo"
+    }
+
+    client = TestClient(app)
+    response = client.post("/predict", json=payload)
+    assert response.status_code == 422

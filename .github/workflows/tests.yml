@@ -22,3 +22,12 @@ jobs:
 
       - name: Run tests
         run: pytest
+  
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fake deploy
+        run: echo "Deploy realizado com sucesso!"
+
