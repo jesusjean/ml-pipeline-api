@@ -28,6 +28,13 @@ def test_predict():
     assert response.status_code == 200
     data = response.json()
     assert "prediction" in data
+    assert "prediction_label" in data
+    assert "confidence" in data
+    assert "model_version" in data
+    assert "model_file" in data
+    assert isinstance(data["confidence"],float)
+    assert 0 <= data["confidence"] <= 1
+    assert data["prediction"] in [0,1]
 
 def test_metrics():
     client = TestClient(app)
@@ -40,6 +47,7 @@ def test_metrics():
 
     assert "accuracy" in data
     assert "features" in data
+
 
 def test_features():
     client = TestClient(app)
