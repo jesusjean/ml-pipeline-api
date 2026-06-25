@@ -106,3 +106,13 @@ def test_predict_invalid_age():
     client = TestClient(app)
     response = client.post("/predict", json=payload)
     assert response.status_code == 422
+
+def test_predict_missing_age():
+    payload = {
+      "income": 5000,
+      "city": "Sao Paulo"
+    }
+
+    client = TestClient(app)
+    response = client.post("/predict", json=payload)
+    assert response.status_code == 422
