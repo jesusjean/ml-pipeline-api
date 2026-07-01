@@ -28,6 +28,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Fake deploy
-        run: echo "Deploy realizado com sucesso!"
+      - name: Trigger Render deploy
+        run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
 
