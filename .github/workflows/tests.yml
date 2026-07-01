@@ -31,3 +31,23 @@ jobs:
       - name: Trigger Render deploy
         run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
 
+
+  verify:
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait for API and check health
+        run: |
+          for attempt in {1..10}; do
+            if curl -fsS "https://ml-pipeline-api-29u7.onrender.com/health"; then
+              echo "API is healthy!"
+              exit 0
+            fi
+
+            echo "API not ready yet. Trying again..."
+            sleep 15
+          done
+
+          echo "API did not become healthy."
+          exit 1
