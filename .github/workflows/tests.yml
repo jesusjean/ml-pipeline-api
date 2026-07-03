@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Verify deployed commit
         run: |
-          for attempt in {1..10}; do
+          for attempt in {1..20}; do
             DEPLOYED_SHA=$(curl -fsS "https://ml-pipeline-api-29u7.onrender.com/model-info" | python3 -c "import sys, json; print(json.load(sys.stdin)['commit_sha'])")
 
             if [ "$DEPLOYED_SHA" = "$GITHUB_SHA" ]; then
@@ -52,7 +52,7 @@ jobs:
             echo "Expected: $GITHUB_SHA"
             echo "Found: $DEPLOYED_SHA"
             echo "New version not live yet. Trying again..."
-            sleep 15
+            sleep 20
           done
 
           echo "The expected commit did not become live."
