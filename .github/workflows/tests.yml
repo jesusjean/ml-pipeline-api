@@ -29,7 +29,9 @@ jobs:
 
     steps:
       - name: Trigger Render deploy
-        run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: curl -fsS -X POST "${DEPLOY_HOOK}&ref=${GITHUB_SHA}"
 
 
   verify:
@@ -37,17 +39,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Wait for API and check health
+      - name: Verify deployed commit
         run: |
           for attempt in {1..10}; do
-            if curl -fsS "https://ml-pipeline-api-29u7.onrender.com/health"; then
-              echo "API is healthy!"
+            DEPLOYED_SHA=$(curl -fsS "https://ml-pipeline-api-29u7.onrender.com/model-info" | python3 -c "import sys, json; print(json.load(sys.stdin)['commit_sha'])")
+
+            if [ "$DEPLOYED_SHA" = "$GITHUB_SHA" ]; then
+              echo "Correct commit is live!"
               exit 0
             fi
 
-            echo "API not ready yet. Trying again..."
+            echo "Expected: $GITHUB_SHA"
+            echo "Found: $DEPLOYED_SHA"
+            echo "New version not live yet. Trying again..."
             sleep 15
           done
 
-          echo "API did not become healthy."
+          echo "The expected commit did not become live."
           exit 1

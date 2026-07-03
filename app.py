@@ -22,10 +22,17 @@ MODEL_VERSION = os.getenv("MODEL_VERSION", "v1")           #Define a versão do 
 MODEL_FILENAME = f"model_{MODEL_VERSION}.joblib"     #Monta nome do arquivo
 MODEL_PATH = Path("output") / MODEL_FILENAME         #Monta o caminho do arquivo
 
+
 #Configuração de métricas
 METRICS_PATH = Path("output/metrics.json")
 
 print(f"Carregando modelo de: {MODEL_PATH}")
+
+
+
+#Verificar qual commit que está rodando
+
+COMMIT_SHA = os.getenv("RENDER_GIT_COMMIT", "local")
 
 
 #Estado do modelo (runtime)
@@ -66,7 +73,8 @@ def model_info():
         "model_version": MODEL_VERSION,
         "model_file": str(MODEL_PATH),
         "model_loaded": model is not None,
-        "model_file_exists": MODEL_PATH.exists()
+        "model_file_exists": MODEL_PATH.exists(),
+        "commit_sha": COMMIT_SHA
     }
 
 
