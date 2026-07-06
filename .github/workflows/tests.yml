@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  test:
+  test: #runs pytest and confirms the API still works
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +23,7 @@ jobs:
       - name: Run tests
         run: pytest
   
-  build:
+  build: #confirms the Dockerfile can still build the image
     needs: test
     runs-on: ubuntu-latest
 
@@ -33,18 +33,18 @@ jobs:
       - name: Build Docker image
         run: docker build -t ml-pipeline-api:test .
 
-  deploy:
+  deploy: #triggers Render's Deploy Hook
     needs: build
     runs-on: ubuntu-latest
 
     steps:
       - name: Trigger Render deploy
         env:
-          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
-        run: curl -fsS -X POST "${DEPLOY_HOOK}&ref=${GITHUB_SHA}"
+          DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }} # ref=$GITHUB_SHA tells Render exactly which commit to deploy
+        run: curl -fsS -X POST "${DEPLOY_HOOK}&ref=${GITHUB_SHA}" 
 
 
-  verify:
+  verify: #confirms that the correct commit is actually live
     needs: deploy
     runs-on: ubuntu-latest
 
