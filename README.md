@@ -1,45 +1,252 @@
 # ML Customer Default Prediction Pipeline
 
-This project demonstrates a simple end-to-end machine learning pipeline.
+End-to-end Machine Learning project that trains a simple customer default prediction model and serves it through a FastAPI REST API.
 
-It includes:
+The project includes data preprocessing, model training, API serving, Docker containerization, automated tests, and a CI/CD pipeline with GitHub Actions and Render.
 
-- Data ingestion
-- Data preprocessing
-- Model training
-- Pipeline orchestration
-- Model serving through a REST API
+## Project Overview
+
+This project demonstrates a complete Machine Learning Engineering workflow:
+
+```text
+Raw data
+↓
+Preprocessing
+↓
+Model training
+↓
+Model artifacts
+↓
+FastAPI inference API
+↓
+Docker image
+↓
+CI/CD pipeline
+↓
+Production deployment on Render
+```
+
+The goal is not to build the most accurate model, but to demonstrate how a Machine Learning model can be packaged, tested, deployed, and monitored as a production-ready API.
+
+## Live API
+
+Production Swagger documentation:
+
+```text
+https://ml-pipeline-api-29u7.onrender.com/docs
+```
+
+Main endpoints:
+
+```text
+GET  /health
+GET  /model-info
+GET  /metrics
+GET  /features
+POST /predict
+```
+
+## Features
+
+* End-to-end ML pipeline
+* Data preprocessing
+* Model training with scikit-learn
+* Model artifact generation with joblib
+* FastAPI REST API for inference
+* Pydantic request and response schemas
+* Docker containerization
+* Automated tests with pytest
+* GitHub Actions CI pipeline
+* Docker build validation in CI
+* Render deployment through Deploy Hook
+* Production verification after deploy
+* Commit-based deployment validation
 
 ## Architecture
 
-Raw data → preprocessing → model training → API inference
+```text
+data/raw
+   ↓
+scripts/preprocess.py
+   ↓
+data/processed
+   ↓
+train.py
+   ↓
+output/model_v1.joblib
+output/metrics.json
+   ↓
+FastAPI app
+   ↓
+Docker
+   ↓
+Render
+```
 
+## CI/CD Pipeline
 
+The project uses GitHub Actions to automate quality checks and deployment.
 
+Current workflow:
+
+```text
+git push
+↓
+test
+↓
+build
+↓
+deploy
+↓
+verify
+```
+
+Pipeline stages:
+
+1. **test**
+   Installs dependencies and runs automated tests with pytest.
+
+2. **build**
+   Builds the Docker image to ensure the Dockerfile is valid.
+
+3. **deploy**
+   Triggers a Render deployment using a secure Deploy Hook stored in GitHub Secrets.
+
+4. **verify**
+   Calls the production `/model-info` endpoint and verifies that the deployed commit matches the GitHub commit that triggered the workflow.
+
+This ensures that the API is not only deployed, but that the correct version is running in production.
 
 ## Project Structure
 
-## Project Structure
+```text
+.
+├── app.py
+├── schemas.py
+├── model_utils.py
+├── model_loader.py
+├── prediction_service.py
+├── pipeline.py
+├── train.py
+├── watch_raw_data.py
+├── requirements.txt
+├── Dockerfile
+├── README.md
+├── data/
+│   ├── raw/
+│   └── processed/
+├── output/
+│   ├── model_v1.joblib
+│   └── metrics.json
+├── logs/
+├── scripts/
+│   └── preprocess.py
+├── tests/
+│   └── test_api.py
+└── .github/
+    └── workflows/
+        └── tests.yml
+```
 
-- `app.py`: orquestra a API FastAPI, define endpoints e chama os serviços
-- `schemas.py`: define os formatos de entrada e saída da API
-- `model_utils.py`: carrega o modelo e as métricas/features
-- `prediction_service.py`: prepara os dados e executa a previsão
+## Main Components
 
-- `pipeline.py`: executa o fluxo completo de preprocessamento e treino
-- `train.py`: treina o modelo e salva os artefatos
-- `scripts/preprocess.py`: limpa e prepara os dados
+### `app.py`
 
-- `data/`: dados brutos e processados
-- `output/`: modelo treinado e métricas
-- `logs/`: logs de execução
-- `tests/`: testes automatizados (em evolução)
+Defines the FastAPI application and exposes the API endpoints.
 
+Responsibilities:
 
-## Running the Pipeline
+* API routing
+* Startup model loading
+* Health check
+* Model information endpoint
+* Metrics endpoint
+* Features endpoint
+* Prediction endpoint
 
+### `schemas.py`
+
+Defines the input and output schemas using Pydantic.
+
+It controls the expected request format and the response structure returned by the API.
+
+### `prediction_service.py`
+
+Contains the prediction logic.
+
+Responsibilities:
+
+* Prepare input data
+* Build the feature row
+* Align input columns with model features
+* Run model prediction
+* Return prediction and confidence
+
+### `model_loader.py`
+
+Responsible for loading model-related resources.
+
+Responsibilities:
+
+* Load model metrics
+* Load expected model features
+
+### `model_utils.py`
+
+Responsible for loading model artifacts.
+
+Responsibilities:
+
+* Load trained model
+* Load model metadata
+
+### `train.py`
+
+Trains the machine learning model and saves the model artifact.
+
+### `pipeline.py`
+
+Runs the full local ML pipeline.
+
+Responsibilities:
+
+* Run preprocessing
+* Train model
+* Save outputs
+
+### `tests/test_api.py`
+
+Contains automated API tests.
+
+The test suite validates:
+
+* Health check
+* Valid prediction request
+* Invalid prediction request
+* Missing required field
+* Metrics endpoint
+* Features endpoint
+* Model info endpoint
+
+## Running Locally
+
+### 1. Activate the virtual environment
+
+```bash
+source .venv/bin/activate
+```
+
+### 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run the pipeline
+
+```bash
 python pipeline.py
-
+```
 
 This will:
 
@@ -47,16 +254,27 @@ This will:
 2. Train the model
 3. Save model artifacts
 
-## Running the API
+### 4. Run the API locally
 
+```bash
 uvicorn app:app --reload
-
+```
 
 Swagger docs:
-http://127.0.0.1:8000/docs
 
+```text
+http://127.0.0.1:8000/docs
+```
 
 ## Example Prediction Request
+
+Endpoint:
+
+```text
+POST /predict
+```
+
+Request body:
 
 ```json
 {
@@ -64,13 +282,151 @@ http://127.0.0.1:8000/docs
   "income": 5000,
   "city": "Sao Paulo"
 }
+```
 
+Example response:
+
+```json
+{
+  "prediction_label": "No Default",
+  "confidence": 0.82,
+  "model_version": "v1",
+  "model_file": "output/model_v1.joblib",
+  "prediction": 0
+}
+```
+
+## Model Info Endpoint
+
+Endpoint:
+
+```text
+GET /model-info
+```
+
+Example response:
+
+```json
+{
+  "model_version": "v1",
+  "model_file": "output/model_v1.joblib",
+  "model_loaded": true,
+  "model_file_exists": true,
+  "commit_sha": "543d645..."
+}
+```
+
+This endpoint is used by the CI/CD pipeline to verify that the expected commit is running in production.
+
+## Metrics Endpoint
+
+Endpoint:
+
+```text
+GET /metrics
+```
+
+Example response:
+
+```json
+{
+  "accuracy": 0.5,
+  "n_train": 2,
+  "n_test": 2,
+  "features": [
+    "age",
+    "income",
+    "income_per_age",
+    "city_Rio",
+    "city_Sao Paulo"
+  ]
+}
+```
+
+## Features Endpoint
+
+Endpoint:
+
+```text
+GET /features
+```
+
+Example response:
+
+```json
+{
+  "features": [
+    "age",
+    "income",
+    "income_per_age",
+    "city_Rio",
+    "city_Sao Paulo"
+  ]
+}
+```
+
+## Running Tests
+
+```bash
+pytest
+```
+
+Expected result:
+
+```text
+7 passed
+```
+
+The tests are also executed automatically by GitHub Actions on every push to the `main` branch.
+
+## Docker
+
+Build the Docker image locally:
+
+```bash
+docker build -t ml-pipeline-api .
+```
+
+Run the container:
+
+```bash
+docker run -p 8000:8000 ml-pipeline-api
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8000/docs
+```
 
 ## Technologies
 
-Python
-Pandas
-Scikit-learn
-FastAPI
-Docker (to be added)
-Pytest (to be added)
+* Python
+* Pandas
+* scikit-learn
+* FastAPI
+* Pydantic
+* Uvicorn
+* Joblib
+* Pytest
+* Docker
+* GitHub Actions
+* Render
+
+## What This Project Demonstrates
+
+This project demonstrates practical Machine Learning Engineering skills, including:
+
+* Building an end-to-end ML pipeline
+* Serving a trained model through an API
+* Structuring a Python ML project
+* Writing automated API tests
+* Containerizing an ML application
+* Creating a CI/CD pipeline
+* Deploying to production
+* Verifying the deployed production version
+* Managing secrets securely with GitHub Secrets
+
+## Notes
+
+This project uses a small sample dataset for learning purposes. The main focus is the engineering workflow around the model, not model performance.
