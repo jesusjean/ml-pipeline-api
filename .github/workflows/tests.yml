@@ -23,8 +23,18 @@ jobs:
       - name: Run tests
         run: pytest
   
-  deploy:
+  build:
     needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t ml-pipeline-api:test .
+
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
