@@ -1,5 +1,11 @@
 # ML Customer Default Prediction Pipeline
 
+
+
+!\[CI/CD](https://github.com/jesusjean/ml-pipeline-api/actions/workflows/tests.yml/badge.svg)
+
+
+
 End-to-end Machine Learning project that trains a simple customer default prediction model and serves it through a FastAPI REST API.
 
 The project includes data preprocessing, model training, API serving, Docker containerization, automated tests, and a CI/CD pipeline with GitHub Actions and Render.
@@ -73,7 +79,7 @@ data/processed
    ↓
 train.py
    ↓
-output/model_v1.joblib
+output/model\\\_v1.joblib
 output/metrics.json
    ↓
 FastAPI app
@@ -104,16 +110,13 @@ verify
 Pipeline stages:
 
 1. **test**
-   Installs dependencies and runs automated tests with pytest.
-
+Installs dependencies and runs automated tests with pytest.
 2. **build**
-   Builds the Docker image to ensure the Dockerfile is valid.
-
+Builds the Docker image to ensure the Dockerfile is valid.
 3. **deploy**
-   Triggers a Render deployment using a secure Deploy Hook stored in GitHub Secrets.
-
+Triggers a Render deployment using a secure Deploy Hook stored in GitHub Secrets.
 4. **verify**
-   Calls the production `/model-info` endpoint and verifies that the deployed commit matches the GitHub commit that triggered the workflow.
+Calls the production `/model-info` endpoint and verifies that the deployed commit matches the GitHub commit that triggered the workflow.
 
 This ensures that the API is not only deployed, but that the correct version is running in production.
 
@@ -123,12 +126,12 @@ This ensures that the API is not only deployed, but that the correct version is 
 .
 ├── app.py
 ├── schemas.py
-├── model_utils.py
-├── model_loader.py
-├── prediction_service.py
+├── model\\\_utils.py
+├── model\\\_loader.py
+├── prediction\\\_service.py
 ├── pipeline.py
 ├── train.py
-├── watch_raw_data.py
+├── watch\\\_raw\\\_data.py
 ├── requirements.txt
 ├── Dockerfile
 ├── README.md
@@ -136,13 +139,13 @@ This ensures that the API is not only deployed, but that the correct version is 
 │   ├── raw/
 │   └── processed/
 ├── output/
-│   ├── model_v1.joblib
+│   ├── model\\\_v1.joblib
 │   └── metrics.json
 ├── logs/
 ├── scripts/
 │   └── preprocess.py
 ├── tests/
-│   └── test_api.py
+│   └── test\\\_api.py
 └── .github/
     └── workflows/
         └── tests.yml
@@ -170,7 +173,7 @@ Defines the input and output schemas using Pydantic.
 
 It controls the expected request format and the response structure returned by the API.
 
-### `prediction_service.py`
+### `prediction\\\_service.py`
 
 Contains the prediction logic.
 
@@ -182,7 +185,7 @@ Responsibilities:
 * Run model prediction
 * Return prediction and confidence
 
-### `model_loader.py`
+### `model\\\_loader.py`
 
 Responsible for loading model-related resources.
 
@@ -191,7 +194,7 @@ Responsibilities:
 * Load model metrics
 * Load expected model features
 
-### `model_utils.py`
+### `model\\\_utils.py`
 
 Responsible for loading model artifacts.
 
@@ -214,7 +217,7 @@ Responsibilities:
 * Train model
 * Save outputs
 
-### `tests/test_api.py`
+### `tests/test\\\_api.py`
 
 Contains automated API tests.
 
@@ -230,19 +233,19 @@ The test suite validates:
 
 ## Running Locally
 
-### 1. Activate the virtual environment
+### 1\. Activate the virtual environment
 
 ```bash
 source .venv/bin/activate
 ```
 
-### 2. Install dependencies
+### 2\. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Run the pipeline
+### 3\. Run the pipeline
 
 ```bash
 python pipeline.py
@@ -254,7 +257,7 @@ This will:
 2. Train the model
 3. Save model artifacts
 
-### 4. Run the API locally
+### 4\. Run the API locally
 
 ```bash
 uvicorn app:app --reload
@@ -288,10 +291,10 @@ Example response:
 
 ```json
 {
-  "prediction_label": "No Default",
+  "prediction\\\_label": "No Default",
   "confidence": 0.82,
-  "model_version": "v1",
-  "model_file": "output/model_v1.joblib",
+  "model\\\_version": "v1",
+  "model\\\_file": "output/model\\\_v1.joblib",
   "prediction": 0
 }
 ```
@@ -308,11 +311,11 @@ Example response:
 
 ```json
 {
-  "model_version": "v1",
-  "model_file": "output/model_v1.joblib",
-  "model_loaded": true,
-  "model_file_exists": true,
-  "commit_sha": "543d645..."
+  "model\\\_version": "v1",
+  "model\\\_file": "output/model\\\_v1.joblib",
+  "model\\\_loaded": true,
+  "model\\\_file\\\_exists": true,
+  "commit\\\_sha": "543d645..."
 }
 ```
 
@@ -331,14 +334,14 @@ Example response:
 ```json
 {
   "accuracy": 0.5,
-  "n_train": 2,
-  "n_test": 2,
-  "features": [
+  "n\\\_train": 2,
+  "n\\\_test": 2,
+  "features": \\\[
     "age",
     "income",
-    "income_per_age",
-    "city_Rio",
-    "city_Sao Paulo"
+    "income\\\_per\\\_age",
+    "city\\\_Rio",
+    "city\\\_Sao Paulo"
   ]
 }
 ```
@@ -355,12 +358,12 @@ Example response:
 
 ```json
 {
-  "features": [
+  "features": \\\[
     "age",
     "income",
-    "income_per_age",
-    "city_Rio",
-    "city_Sao Paulo"
+    "income\\\_per\\\_age",
+    "city\\\_Rio",
+    "city\\\_Sao Paulo"
   ]
 }
 ```
@@ -430,3 +433,4 @@ This project demonstrates practical Machine Learning Engineering skills, includi
 ## Notes
 
 This project uses a small sample dataset for learning purposes. The main focus is the engineering workflow around the model, not model performance.
+
