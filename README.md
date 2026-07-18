@@ -2,7 +2,7 @@
 
 
 
-[!\[CI/CD](https://github.com/jesusjean/ml-pipeline-api/actions/workflows/tests.yml/badge.svg)](https://github.com/jesusjean/ml-pipeline-api/actions/workflows/tests.yml)
+[![CI/CD](https://github.com/jesusjean/ml-pipeline-api/actions/workflows/tests.yml/badge.svg)](https://github.com/jesusjean/ml-pipeline-api/actions/workflows/tests.yml)
 
 
 
