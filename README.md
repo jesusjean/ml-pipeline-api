@@ -79,7 +79,7 @@ data/processed
    ↓
 train.py
    ↓
-output/model\\\\\\\_v1.joblib
+output/model_v1.joblib
 output/metrics.json
    ↓
 FastAPI app
@@ -126,12 +126,12 @@ This ensures that the API is not only deployed, but that the correct version is 
 .
 ├── app.py
 ├── schemas.py
-├── model\\\\\\\_utils.py
-├── model\\\\\\\_loader.py
-├── prediction\\\\\\\_service.py
+├── model_utils.py
+├── model_loader.py
+├── prediction_service.py
 ├── pipeline.py
 ├── train.py
-├── watch\\\\\\\_raw\\\\\\\_data.py
+├── watch_raw_data.py
 ├── requirements.txt
 ├── Dockerfile
 ├── README.md
@@ -139,13 +139,13 @@ This ensures that the API is not only deployed, but that the correct version is 
 │   ├── raw/
 │   └── processed/
 ├── output/
-│   ├── model\\\\\\\_v1.joblib
+│   ├── model_v1.joblib
 │   └── metrics.json
 ├── logs/
 ├── scripts/
 │   └── preprocess.py
 ├── tests/
-│   └── test\\\\\\\_api.py
+│   └── test_api.py
 └── .github/
     └── workflows/
         └── tests.yml
@@ -173,7 +173,7 @@ Defines the input and output schemas using Pydantic.
 
 It controls the expected request format and the response structure returned by the API.
 
-### `prediction\\\\\\\_service.py`
+### `prediction_service.py`
 
 Contains the prediction logic.
 
@@ -185,7 +185,7 @@ Responsibilities:
 * Run model prediction
 * Return prediction and confidence
 
-### `model\\\\\\\_loader.py`
+### `model_loader.py`
 
 Responsible for loading model-related resources.
 
@@ -194,7 +194,7 @@ Responsibilities:
 * Load model metrics
 * Load expected model features
 
-### `model\\\\\\\_utils.py`
+### `model_utils.py`
 
 Responsible for loading model artifacts.
 
@@ -217,7 +217,7 @@ Responsibilities:
 * Train model
 * Save outputs
 
-### `tests/test\\\\\\\_api.py`
+### `tests/test_api.py`
 
 Contains automated API tests.
 
@@ -291,10 +291,10 @@ Example response:
 
 ```json
 {
-  "prediction\\\\\\\_label": "No Default",
+  "prediction_label": "No Default",
   "confidence": 0.82,
-  "model\\\\\\\_version": "v1",
-  "model\\\\\\\_file": "output/model\\\\\\\_v1.joblib",
+  "model_version": "v1",
+  "model_file": "output/model_v1.joblib",
   "prediction": 0
 }
 ```
@@ -311,11 +311,11 @@ Example response:
 
 ```json
 {
-  "model\\\\\\\_version": "v1",
-  "model\\\\\\\_file": "output/model\\\\\\\_v1.joblib",
-  "model\\\\\\\_loaded": true,
-  "model\\\\\\\_file\\\\\\\_exists": true,
-  "commit\\\\\\\_sha": "543d645..."
+  "model_version": "v1",
+  "model_file": "output/model_v1.joblib",
+  "model_loaded": true,
+  "model_file_exists": true,
+  "commit_sha": "543d645..."
 }
 ```
 
@@ -334,14 +334,14 @@ Example response:
 ```json
 {
   "accuracy": 0.5,
-  "n\\\\\\\_train": 2,
-  "n\\\\\\\_test": 2,
-  "features": \\\\\\\[
+  "n_train": 2,
+  "n_test": 2,
+  "features": [
     "age",
     "income",
-    "income\\\\\\\_per\\\\\\\_age",
-    "city\\\\\\\_Rio",
-    "city\\\\\\\_Sao Paulo"
+    "income_per_age",
+    "city_Rio",
+    "city_Sao Paulo"
   ]
 }
 ```
@@ -358,12 +358,12 @@ Example response:
 
 ```json
 {
-  "features": \\\\\\\[
+  "features": [
     "age",
     "income",
-    "income\\\\\\\_per\\\\\\\_age",
-    "city\\\\\\\_Rio",
-    "city\\\\\\\_Sao Paulo"
+    "income_per_age",
+    "city_Rio",
+    "city_Sao Paulo"
   ]
 }
 ```
